@@ -68,8 +68,9 @@ numeric operational/configuration fields, and a `knots` array. Each knot had an
 [E2]
 
 **Inference.** The JSON is the strongest installed candidate for rendering an
-airport graph and associating gates with it. Code must preserve unknown numeric
-codes and missing values until a runtime observation validates their semantics.
+airport graph and associating gates with it. The semantics of unknown numeric
+codes and missing values remain unresolved; mapping them to domain values is a
+separate maintainer decision after runtime validation.
 
 ## Required information absent or uncertain
 

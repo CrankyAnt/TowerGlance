@@ -29,7 +29,7 @@ A user-directed change to one strip's position or order while the stripboard rem
 _Avoid_: Manual mode, game-board change
 
 **ADIRS**:
-The official Tower! Simulator 3 term for the airport-surface display concept, covering an airport layout and the aircraft presented on it. TowerGlance uses the same term for its corresponding live view.
+The Tower! Simulator 3 term observed in game-owned local data for an airport-surface display. TowerGlance adopts ADIRS for its corresponding live view of an airport layout and the aircraft presented on it.
 _Avoid_: Airport Map
 
 **Traffic Schedule**:
