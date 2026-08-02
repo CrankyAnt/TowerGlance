@@ -8,6 +8,18 @@ TowerGlance presents the local operational picture of a Tower! Simulator 3 sessi
 The currently active Tower! Simulator 3 run at one airport whose observed and derived operational state TowerGlance presents. A TowerGlance instance follows at most one live Operational Session.
 _Avoid_: Browser session, user session
 
+**Quick Play Session**:
+An Operational Session started through Tower! Simulator 3 Quick Play with a selected locally available schedule database and time window.
+_Avoid_: Scheduled Session, regular session
+
+**Career Challenge**:
+An Operational Session started through Tower! Simulator 3 Career from a challenge-defined time window, traffic set, and optional operating conditions or restrictions.
+_Avoid_: Career session, career schedule
+
+**Official Airport**:
+An airport package supplied with Tower! Simulator 3 or through a locally installed official airport DLC and eligible for capability-specific verification against TowerGlance's validated official-airport standard.
+_Avoid_: Supported airport, known airport
+
 **Recovery Snapshot**:
 A TowerGlance-owned local copy of previously reconstructed state for an identifiable Operational Session, used to restore the experience quickly. Its age must remain visible to TowerGlance, and newer game-derived information always supersedes it.
 _Avoid_: Browser cache, authoritative game data
