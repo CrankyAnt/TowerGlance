@@ -2,213 +2,263 @@
 
 ## Question and scope
 
-Which interfaces of the current locally installed Tower! Simulator 3 (TS3) build
-make game-produced data observable to a separate process, component, or service;
-which have independently observed output during a game session; and do any exist
-beyond `Player.log`?
+Issue #22 asks which mechanisms in the current locally installed Tower!
+Simulator 3 (TS3) build make game-produced data observable outside `Player.log`,
+and what evidence limits each conclusion. It is an evidence inventory, not an
+integration specification, protocol publication, or TowerGlance-viability
+decision.
 
-This documentary, static, and bounded runtime pass concerns installed TS3 build
-`v1.5.180.661s HDRP AI HOTFIX 2` on 2026-08-02. TS3 alone was launched for
-Quick Play at a stock airport. A runway was selected and the session accelerated
-to produce several live aircraft, strip/radar state, radio/status text, and
-automatic unattended-aircraft faults; no aircraft or ATC command was given.
+The research covers TS3 build `v1.5.180.661s HDRP AI HOTFIX 2` and evidence
+collected on 2026-08-02–03. Its exercised scenario matrix was: settings and
+menu; active single-player with user-executed aircraft operations; one
+external-window instance with four panels followed by an overlapping second
+instance; multiplayer list, host, and lobby; a TS3 restart; and bounded
+observations of external-app leads. It excludes raw traffic, proprietary bulk,
+payload keys or schema, credentials, personal/profile data, operational
+identifiers, absolute paths, and third-party code, assets, installation
+content, private streams, logs, or UI/product labels.
 
-The elevated probe was metadata-only: it did not connect, send, request,
-subscribe, capture a payload, attach a debugger, read memory, or exercise a
-write capability. Its public evidence is limited to process roles, file roles,
-relative event ordering, broad transport type, and sanitized counts. It contains
-no endpoint values, object names, paths, raw traffic, keys, identifiers,
-credentials, personal data, or proprietary bulk content.
+Documentary and static review preceded runtime probing. Runtime phases then
+tested the mechanism candidates and lifecycle assumptions found by that review;
+external-app observations were performed last and could produce hypotheses
+only, never evidence authority.
 
-After the derived evidence was incorporated, all issue-specific research-owned
-raw metadata captures and temporary probe scripts were deleted from the local
-workspace. No packet/payload capture or raw log content was retained, and the
-TS3-owned ephemeral configuration was not copied into the repository.
+The ledger is mechanism-based, not a list of examples. Each status is scoped
+to this build, exercised timing, and available privileges; it cannot prove
+absence in another mode or future build.
 
-The ledger is mechanism-based, not a list of examples. “Investigated but not
-observed” is a result for this build and scenario only; it is not proof of
-absence in another session or build.
-
-Local provenance is separated by method: persistent-file metadata observation
-([L2]); process-tree and socket-metadata observation ([L3]); user-authorized GUI
-phase observation ([L4]); and post-session static inventory of TS3-owned
-components, ephemeral configuration roles, and service registration ([L5]).
+An independent-public-source screen was also completed. The screened SteamDB
+patch index is explicitly unaffiliated with Valve/Steam and mirrors the Update
+7 announcement; it supplies a time/build-index lead only, not an independent
+TS3 interface claim. No technical interface conclusion in this inventory relies
+on it; concrete TS3 conclusions remain independently confirmed locally or by
+the primary sources cited below. [S10][L5]
 
 ## Direct answer
 
-**Yes: the current build independently shows TS3-owned interface mechanisms
-beyond `Player.log`, including first-party loopback IPC to local AI components
-and to built-in external-display children. No: beyond the diagnostic-log family,
-this pass observed no independently verified game-produced output during a game
-session. It observed lifecycle/transport candidates, not their payload or
-rendered output, and therefore establishes no readable non-log live-state feed,
-public API, or safe TowerGlance-consumable interface.**
+**Yes.** The current local TS3 build produces observable game data beyond
+`Player.log` through a **game-owned loopback TCP listener** on the selected
+Communication Port. The observed local port was `12030`. It was active in live
+single-player and was used by the main TS3 process and game-owned `extwin`,
+`cpm`, `recog`, and `tts` processes. It was absent in settings/menu and closed
+on the observed multiplayer transition.
 
-- `Player-prev.log` is an observed prior-session member of the same diagnostic
-  log family, not an independent live mechanism. FeelThere Support identifies it
-  as the session before the last one. [S1]
-- The main TS3 process formed established loopback pairs with first-party local
-  text-to-speech, recognition, and parser children during the live session.
-  Metadata establishes process ownership/lifecycle and transport presence, not
-  message direction, framing, or game-state content. [L3]
-- Invoking TS3's built-in Add Window feature started TS3-owned external-display
-  children, with corresponding new loopback pairs. Their lifecycle ended when
-  returning to the menu. This is the strongest candidate for a TS3-owned live
-  display/state transport, but that interpretation remains an inference because
-  the payload, rendered output, and client semantics were not inspected.
-  [L3][L4]
+The strongest independent game-owned route is `extwin`: two concurrent
+external-window processes connected to that listener and visibly rendered live
+game panels. FeelThere's developer hotfix independently names “ADIRS on the
+external window.” [S4]
 
-`Player.log` remains supplementary diagnostic evidence rather than an
-authoritative Operational Session contract. [S3][S4]
+This establishes a game-owned transport/output route, not a public API or a
+safe read-only client. The listener was bidirectional. No official public TS3
+document found here describes the Communication Port, an
+`extwin`/`cpm`/`recog`/`tts` protocol, a supported external client, payload
+schema, or multiplayer-port contract.
 
-## Clean-room external-lead boundary
+## Observed evidence
 
-**Maintainer decision.** External companion applications are not TS3-owned
-components or candidates in this ledger. A separate static, no-launch clean-room
-inspection may generate only general hypotheses about TS3-owned interfaces; its
-results are not published here as evidence.
+### Game-owned Communication Port and external window
 
-No external application may become a TowerGlance dependency, and no external
-code, protocol, private implementation detail, data stream, authentication,
-credential, asset, or installation content may be copied, reused, or published.
-Every hypothesis must be independently verified against TS3 before it can become
-a conclusion in this inventory.
+- In live single-player, a game-owned loopback listener was active on the
+  selected Communication Port (`12030` in the observed sessions). Settings
+  exposed multiple fixed choices; their full list is deliberately not
+  published. The listener was loopback-only in the observations.
+- The TS3 main process and game-owned `extwin`, `cpm`, `recog`, and `tts`
+  helpers used connections associated with the listener. This establishes
+  process ownership, correlated lifecycle, transport, and bidirectionality;
+  it does not establish authorization or client semantics.
+- Two `extwin` instances were simultaneously connected and visibly rendered
+  live game panels. This is independent of external-app leads.
+- The retained format signature deliberately contains no content: 5,000 TCP
+  payload frames totalling 3,129,262 bytes; printable ratio 1.0; 3,331
+  JSON-like frame starts and 3,331 newline-terminated payload frames; null
+  ratio 0; TLS/compression magic 0; entropy 4.814 bits/byte. It supports only
+  a bounded printable/JSON-like framing inference. TCP segmentation leaves
+  record boundaries, request/response pairing, message completeness, schema,
+  and field meaning unknown.
+- A separate static loopback configuration candidate was found, but had no
+  matching runtime listener or connection; it remains unconfirmed.
 
-Independent public technical leads were also screened. They produced no
-reliable claim of a TS3 protocol, API, or live-state feed. The retained
-independent index only mirrors first-party update notes; its generic technology
-listings were not promoted to TS3-use claims without local verification. [S8]
+### Multiplayer candidates and external-app leads
+
+- Remote TCP `8080` was observed in list/menu. TCP `8081` appeared in
+  host/lobby and closed on return, while `8080` remained; UDP endpoint families
+  changed across multiplayer phases. Service ownership, peer identity,
+  protocol, authentication, direction, and relevance remain unknown.
+- External-app logs and variants are not sources or dependencies. They yielded
+  non-authoritative hypotheses only: one external app directly connected to
+  the independently confirmed game listener; another simultaneously held a
+  local game-listener connection and remote TLS connection. Only the
+  independently confirmed TS3-owned listener and `extwin` route supports the
+  conclusion in this inventory.
+
+### Files, diagnostics, and processes
+
+- Main and external-window `Player.log` files are game-owned diagnostics, not
+  an authoritative Operational Session contract. Official support distinguishes
+  current and previous log-family roles. [S1]
+- Process creation and game-owned helper roles were observed. A temporary
+  helper-extraction class was observed but did not provide a convincing
+  additional game-data channel.
+- No convincing additional file channel was found in the exercised scenarios.
+  That bounded observation is not a claim that another mode or timing cannot
+  create one.
 
 ## Evidence-led coverage ledger
 
-| Mechanism class | Status | Evidence and minimal signature | Unknowns / safety boundary |
+| Mechanism class | Status | Evidence and minimal signature | Limitations / boundary |
 | --- | --- | --- | --- |
-| Current diagnostic log | **observed interface with output** | File-based append/reset text diagnostic stream. Output was observed in prior controlled sessions. Persistent-file metadata observation established it as the only changed file family in the monitored installation and persistent user-data roots. [S3][S4][L2] | Undocumented mixed format; no stable session, aircraft, flight, strip, or lifecycle identity is established. Ephemeral child configuration is a separate row outside those monitored roots. |
-| Previous diagnostic log | **observed interface with output** | Text prior-session log in the same diagnostic family; official support identifies the broad rotation role, and persistent-file metadata observation during the current-build launch independently reproduced a metadata-level rotation/change. [S1][L1][L2] | It is not a separate live feed, and no content was retained or reproduced. |
-| Generated child configuration | **candidate requiring a separate probe** | Post-session static inventory found ephemeral first-party JSON configuration associated with local AI children. Sanitized role-level inspection found local resource/configuration plus host/port fields. [L5] | Creation/change during a game session was not observed, so game-produced output is not established. The files were outside the persistent roots monitored by [L2]; exact fields/values remain private. |
-| Installed airport/database/instrument resources | **irrelevant because no game-produced data** | JSON/CSV/configuration resources expose static airport geometry, schedules, terminals, recognizer, and presentation configuration. [S2] | Useful static inputs, but not session-produced output; live selection/linkage remains unproven. |
-| Other generated user state, saves, temporary files, cache | **investigated but not observed** | Apart from the separately listed ephemeral child configuration, persistent-file metadata observation established no changed game-owned file family beyond diagnostic logs in its monitored roots. [L2][L5] | This does not exclude files created in other modes, timings, airports, roots, or future builds. |
-| Crash dumps and bug-report package | **candidate requiring a separate probe** | Official notes say the in-game bug-report action gathers a package. [S5] | Invoking it creates output and is outside this observational pass. Contents and relation to live state are unknown. |
-| First-party local AI child processes | **candidate requiring a separate probe** | Official material describes local text-to-speech and recognition. Game-root-filtered process-tree observation established first-party text-to-speech, recognition, and parser children during the session; they exited on return to menu. [S5][S6][L3] | Process presence establishes a component boundary, not output, exact responsibility, data contract, or Operational Session identity. |
-| TCP listeners/connections | **candidate requiring a separate probe** | Owner-attributed socket-metadata observation found 13 TS3-owned TCP records at baseline, including one loopback listener and established main/AI-child/self pairs. Add Window raised the count 13 → 16 → 19; menu return reduced it 19 → 3 → 0 as children exited. [L3][L4] | Socket metadata establishes interface presence, not output, payload, framing, message direction, authentication, read-only client behavior, or a public API. Do not connect. |
-| Built-in external display | **candidate requiring a separate probe** | GUI phase observation started the TS3 Add Window feature. Correlated process/socket observation found two TS3-owned external-display players plus crash handlers and a new main-process loopback pair per child; they exited on menu return. [L3][L4] | Live display/state transport is a strong inference, not observed output. Rendered content and payload were not inspected; compatibility and safe consumption remain unknown. |
-| UDP endpoints/bindings | **candidate requiring a separate probe** | Owner-attributed socket-metadata observation found 26 wildcard UDP bindings for the main process. [L3] | No UDP traffic, direction, peer role, framing, or game-produced content was observed. A passive metadata-only phase-correlation probe may be justified; no packet capture. |
-| Other local/remote network services | **candidate requiring a separate probe** | TS3 publicly advertises Online Co-op; platform networking documentation describes available mechanisms but does not prove TS3's use. [S6][S7] | Restrict any follow-up to TS3-owned metadata; do not authenticate, query services, or interact with a remote endpoint. |
-| Named pipes | **investigated but not observed** | A global namespace-difference observation saw system-wide churn but could not attribute any pipe to a TS3-owned process. [L3] | Inconclusive: do not treat system-wide activity as TS3 evidence. A future probe needs owner attribution without opening a pipe. |
-| Shared memory, memory-mapped files, anonymous IPC | **candidate requiring a separate probe** | No owner-attributed object/handle inspection was performed, so this mechanism has no positive or negative runtime result. | A live handle/object probe may be considered only if it can avoid object reads and publication of names. |
-| Process modules | **investigated but not observed** | Runtime module-basename inventory for game-root-owned processes did not establish a distinct data-publication mechanism. [L3] | Module presence is capability context, not output or a data contract; binary implementation details are excluded from the public evidence. |
-| Process handles | **candidate requiring a separate probe** | Raw handle/object enumeration was deliberately omitted because it could cross the object-read and publication boundaries. | A separate owner-attribution method is needed before this mechanism can receive a positive or negative result. |
-| Windows services | **investigated but not observed** | A post-session, installation-root-filtered Windows service inventory found no TS3-install-owned service registration; the runtime process tree showed no additional TS3-owned service role. [L3][L5] | This build/scenario-bound result does not exclude publisher components installed elsewhere or future service-backed behavior. |
-| Windows registry and OS-visible configuration/activity | **investigated but not observed** | Post-session static inventory established no TS3 registry-backed data-publication route. [L5] | A future read-only trace must filter to TS3-owned effects and avoid unrelated user data. |
-| Unity/player diagnostic facilities | **investigated but not observed** | Unity documentation plausibly explains the already-counted player-log family; local component inventory identified the main and external-display players as Unity-based. [S9][L5] | This does not establish a separate TS3 output interface, schema, endpoint, or complete output inventory. Do not change launch/logging settings. |
-| Engine/plugin/extension/mod interfaces | **investigated but not observed** | Store material advertises customization, while the local static inventory identified content resources rather than a documented runtime extension API. [S6][S2] | Do not infer an API from customization or inspect external implementations. |
-| In-game radio message log | **candidate requiring a separate probe** | GUI phase observation visibly produced radio/status text, and official notes describe an in-game radio log. [L4][S5] | No externally observable artifact or transport was established. A GUI-authorized output study is separate work. |
-| Platform account, cloud, achievements and overlays | **irrelevant because no game-produced data** | No TS3-published operational-data route was established; platform capability documentation is not TS3-use evidence. [S7] | Do not query account, cloud, authentication, or third-party service data. |
+| Current diagnostic log family | **observed interface with output** | File-based, game-to-file append/reset text output, discovered through persistent-file observation and read-only structural inspection. One bounded snapshot contained 5,580 lines mixing engine/application diagnostics, structured configuration or persisted-state blocks, networking or speech diagnostics, and game-related text; file order supplied only weak sequence evidence. [L1][L2][S9] | Undocumented mixed diagnostics with incomplete/non-monotonic timestamps; not an authoritative live-state schema or stable session/event contract. |
+| Previous diagnostic log family | **observed interface with output** | File-based, game-to-file rotated prior-session text output, discovered through official support documentation and local file-lifecycle observation. [S1][L1][S9] | Same diagnostic family and a prior-session snapshot, not a separate live feed; rotation, completeness, and session-boundary semantics remain undocumented. |
+| Generated child configuration | **candidate requiring a separate probe** | Static game-owned child/configuration role observed. [L1] | Lifecycle and game-produced output were not established. |
+| Static airport/database/instrument resources | **irrelevant because it exposes no game-produced data** | Static local input resources were inventoried. [S8] | Do not establish active-session selection, linkage, or output. |
+| Other generated user state, saves, temp, cache | **investigated but not observed** | File/process coverage did not reveal a convincing extra channel. [L1][L2] | Scenarios, timing, roots, and modes remain incomplete. |
+| Crash dump / bug-report package | **candidate requiring a separate probe** | Official Update 7 describes radio-log and bug-report features. [S2] | Triggering output was outside this safety-stopped runtime work. |
+| Game-owned AI/speech/helpers (`cpm`/`recog`/`tts`) | **candidate requiring a separate probe** | Process roles and loopback connections observed in live single-player. [L2] | Audio/speech and operational-state semantics, framing, and direction unknown. |
+| Game-owned TCP listener (Communication Port) | **observed interface with output** | Live loopback `12030` listener; process/lifecycle correlation and bounded output signature. [L2][L3] | Bidirectional; handshake, permissions, schema, and safe external consumption unknown. |
+| Built-in external display (`extwin`) | **observed interface with output** | Game-owned presentation/stream mechanism: two concurrent TS3-owned clients connected to the listener and visibly rendered live multi-panel output. Game-to-`extwin` output was present inside a bidirectional connection; the content-free aggregate signature is reported above, and official material corroborates an external ADIRS display. [L2][L3][S4] | Screen/payload correspondence, request/response roles, record boundaries, schema, and field meaning remain unknown. |
+| UDP | **candidate requiring a separate probe** | Endpoint families changed across multiplayer phases. [L2] | No payload, direction, peer, or game-produced content established. |
+| Multiplayer remote network | **candidate requiring a separate probe** | Remote TCP `8080`/`8081` lifecycle and UDP-family changes observed. [L2] | No official TS3 port/protocol docs; no active remote interaction. |
+| Named pipes | **investigated but not observed** | Owner-attribution coverage did not establish a persistent TS3 pipe lead. [L2] | Snapshot method cannot exclude timing-, handshake-, or privilege-dependent pipes. |
+| Shared memory / memory-mapped files / anonymous IPC | **investigated but not observed** | Handle/object snapshots did not establish an attributed lead. [L2] | Snapshot evidence cannot prove absence; object names/content were not read. |
+| Windows messages / window handles | **candidate requiring a separate probe** | Game-owned external windows were observed. [L2] | No message inspection or injection; no data route established. |
+| Process modules | **investigated but not observed** | Role-level module inventory did not establish data publication. [L1][L2] | Modules are capability context, not a data contract. |
+| Process handles | **investigated but not observed** | Sanitised handle snapshots were used for attribution only. [L2] | No object content/name reading; snapshot cannot prove absence. |
+| Windows services / scheduled tasks | **investigated but not observed** | Static and runtime ownership coverage found no convincing game-data route. [L1][L2] | Other installation locations, privileges, and builds remain open. |
+| Registry / OS configuration | **investigated but not observed** | TS3-filtered static configuration coverage found no data-publication route. [L1] | Installer and unexercised mode effects remain open. |
+| Unity diagnostics / debug / console | **candidate requiring a separate probe** | Unity/player diagnostics explain the already-counted log family. [S7][L1] | No separate TS3 output interface established; do not change logging settings. |
+| Plugin / extension / mod / Add-ons | **investigated but not observed** | Static/runtime coverage and visible Add-ons surface did not establish a game-data route. [L1][L2][S3] | Visible emptiness cannot prove hidden, disabled, future, or external absence. |
+| In-game radio message log | **candidate requiring a separate probe** | Official Update 7 documents an in-game radio log. [S2] | No externally observable artifact/transport was established. |
+| Platform / cloud / achievements / overlay | **irrelevant because it exposes no game-produced data** | No TS3-published operational-data route was established. [S3][S6] | Do not query accounts, cloud, auth, or third-party services. |
+| Local HTTP / WebSocket / other services | **investigated but not observed** | Socket coverage outside the confirmed listener found no separate route. [L2] | Confirmed listener is not classified as HTTP/WebSocket; no active probe. |
 
-## Facts, inference, and maintainer decision
+## Engineering inference
 
-**Observed facts.** During the specified Quick Play session, TS3 created and
-ended first-party local AI and external-display children in correlation with
-game phases. TCP metadata changed with those lifecycles. The diagnostic-log
-family provided the only independently verified game-produced output: changed
-text-file metadata in the monitored persistent roots. The runtime pass also
-observed wildcard UDP bindings; it did not observe UDP traffic. [L2][L3][L4]
+1. The live loopback listener and concurrent game-owned `extwin` consumers are
+   strong evidence of a TS3-internal game-data route beyond `Player.log`. This
+   is stronger than an external-app correlation because producer, consumers,
+   lifecycle, and visible panels were independently TS3-owned.
+2. The quantitative format signature supports only a tentative printable,
+   JSON-like framing hypothesis. TCP segmentation means it is not a record or
+   schema specification.
+3. The AI/helper boundary may carry speech or other game-adjacent data, but
+   process/connection correlation does not prove content or a separable audio
+   interface.
+4. TCP `8080`/`8081` and UDP changes show a multiplayer network surface, not a
+   local data interface. Valve's Steam Networking documentation describes
+   relay/UDP platform possibilities; it does not prove TS3 uses Steam Datagram
+   Relay or a specific implementation. [S6]
 
-**Inference.** The Add Window correlation is strong evidence that loopback IPC
-likely transports live display/state between TS3-owned processes. The AI-child
-pairs may carry speech/recognition/parser-related data. Neither inference
-establishes that any payload was observed, that it contains operational state,
-or that it has safe external-consumer semantics.
+## Maintainer decision
 
-**Maintainer decision.** Treat all non-log interfaces as unvalidated candidates,
-not TowerGlance inputs. A handshake, request, subscription, client connection,
-payload capture, or write-capability exercise requires a separately bounded
-prototype. No downstream issue is created by this research pass.
+- Do not treat any route as a public TS3 API, stable contract, or demonstrated
+  TowerGlance input. Issue #22 does not claim TowerGlance viability.
+- A future local client must be TowerGlance-owned, separately authorised,
+  narrowly bounded, sanitised, and designed for bidirectional risk. No
+  external-app implementation or stream may become a dependency or authority.
+- All live runtime follow-up is suspended until a separate shutdown-safety
+  method is established.
 
 ## Completeness argument and residual uncertainty
 
-The model covers persistence/generated/cache/save, diagnostics, TCP/UDP,
-pipe/shared-state/IPC, process/child/module/handle/service boundaries,
-OS-observable activity, engine/platform/extension/debug, and local/remote
-services. “Covers” includes explicit candidate/gap rows: handle and shared-object
-inspection was deliberately not performed. The model is backed by a Quick Play
-runtime lifecycle, including accelerated unattended activity and the built-in
-external-display feature, rather than static evidence alone.
+The scenario matrix exercised settings/menu, active single-player with user
+operations, external-window overlap, multiplayer list/host/lobby, restart, and
+bounded external leads. The ledger explicitly covers file/log families,
+generated state, static resources, crash output, AI/audio helpers, TCP/UDP,
+multiplayer, pipes/shared state, windows/messages, modules/handles,
+services/tasks, registry, Unity diagnostics, extensions, radio output,
+platform surfaces, and local web/service hypotheses. This is materially broader
+than Player.log or a single TCP observation.
 
-It is still not exhaustive. It does not establish payloads, framing, direction,
-identity, ordering, freshness, permissions, authentication, version stability,
-other airport/mode behavior, multiplayer behavior, or any client compatibility.
-Named pipes remain inconclusive, shared-memory objects were not established,
-and UDP had bindings only. An absence finding is scenario- and build-bound.
+It is not mathematical exhaustiveness. Residual uncertainty includes
+event-/timing-dependent and handshake-required paths, inaccessible or
+privileged mechanisms, unexercised modes/settings, payload schema/identity,
+record ordering/freshness, permissions, write semantics, and version stability.
 
-## Ranked next steps
+## Safety stop
 
-1. **Passive phase-correlation repeat.** Repeat the metadata-only probe across
-   launch, menu, Quick Play, scheduled mode, external-display start/stop, and
-   restart to test lifecycle stability and ephemeral configuration
-   appearance/change without opening interfaces.
-2. **Passive external-display ownership study.** Correlate the built-in display
-   child lifecycle with visible state changes and sanitized TCP metadata only;
-   continue to avoid payload capture and connection.
-3. **Passive IPC attribution.** Improve named-pipe/shared-object attribution so
-   global OS churn cannot be mistaken for TS3, without opening or reading an
-   object.
-4. **Separate bounded interaction prototype, only if justified.** Define a
-   threat model and stop conditions before any handshake, request, subscription,
-   or client connection to a TS3-owned listener.
-5. **Radio-log/bug-report output study.** Authorize separately because it uses
-   GUI actions and may create files; retain only sanitized derived evidence.
+Repeated hangs/exits occurred around tool shutdown. In the last clean run, the
+sampler completed about 1.3 seconds after its last game sample and TS3
+disappeared around capture shutdown. Causality is unknown, but the shutdown
+sequence/tooling combination is a credible safety suspect. Raw local logs are
+retained by explicit instruction for later separate crash analysis. No live
+instrumentation or further probe may proceed until dedicated validation of safe
+capture-tool start, stop, and cleanup establishes a safe method; this makes no
+crash-cause, user-blame, or Escape inference.
 
-No observed interface is recommended as suitable for TowerGlance until output,
-ownership, semantics, stability, and read-only viability are independently
-evidenced.
+## Ranked follow-up candidates
+
+1. **Dedicated capture-tool shutdown-safety validation — prerequisite.**
+   Establish safe capture-tool start, stop, and cleanup before any new live
+   observation. This prerequisite does not investigate or assign the game's
+   crash root cause.
+2. **Bounded TowerGlance-owned Communication Port handshake/read prototype —
+   only after safety.** Define stop conditions and bidirectional threat model;
+   retain only minimal sanitised evidence and stop before schema decoding or
+   write-capable actions.
+3. **Owner-attributed pipe/shared-object/window-message study.** Improve
+   attribution without opening pipes, reading objects, or injecting messages.
+4. **Multiplayer remote-network semantics.** Investigate only after safety and
+   separate explicit authority; keep remote service interaction out of scope
+   unless specifically approved.
+5. **Radio/bug-report/generated-output study.** Separately authorise any GUI
+   action that can generate files; retain only sanitised derived evidence.
+
+No issue is created by these candidates, and none independently demonstrates
+TowerGlance viability.
 
 ## Sources
 
 ### Primary/public sources
 
-- **S1 — official support documentation:** [How to obtain your game log
+- **S1 — FeelThere Support:** [How to obtain your game log
   files](https://feelthere.zendesk.com/hc/en-us/articles/18584181148188-How-to-obtain-your-game-log-files)
-  (FeelThere Support identifies `Player.log` as the last session and
-  `Player-prev.log` as the preceding session).
-- **S5 — current official update announcement:** [Major Tower Simulator 3
-  Update 7](https://steamcommunity.com/games/2176130/announcements/detail/681878780522793839)
-  (radio message log and manual bug-report package).
-- **S6 — official store listing:** [Tower! Simulator 3 on
-  Steam](https://store.steampowered.com/app/2176130/Tower_Simulator_3/) (local
-  neural voice/recognition features, Online Co-op, and customization; not an API
+  (current and previous `Player.log` roles).
+- **S2 — official Update 7:** [Major Tower Simulator 3 Update
+  7](https://steamcommunity.com/games/2176130/announcements/detail/681878780522793839)
+  (radio message log and bug-report feature).
+- **S3 — official Steam store listing:** [Tower! Simulator 3](https://store.steampowered.com/app/2176130/Tower_Simulator_3/)
+  (local voice/recognition, Online Co-op, and customization claims; not an API
   specification).
-- **S7 — platform documentation:** [Steam Networking
-  documentation](https://partner.steamgames.com/doc/features/multiplayer/networking)
-  (platform mechanics, not TS3-use evidence).
-- **S8 — independent public index/mirror:** [SteamDB Update 7
-  record](https://steamdb.info/patchnotes/23732564/) (mirrors the first-party
-  update notes; generic technology listings are hypotheses only and are not
-  evidence of TS3 interface use).
-- **S9 — engine documentation:** [Unity log files](https://docs.unity3d.com/Manual/log-files.html)
-  (general engine log behavior; not a TS3 schema specification).
+- **S4 — FeelThere developer hotfix:** [HOTFIX RELEASED! Details
+  inside](https://steamcommunity.com/app/2176130/discussions/0/591760110786775954/)
+  (explicitly names ADIRS on the external window).
+- **S5 — official TS3 announcements:** [Tower! Simulator 3
+  announcements](https://steamcommunity.com/app/2176130/announcements/)
+  (current official update surface; no port/protocol specification found).
+- **S6 — Valve platform documentation:** [Steam
+  Networking](https://partner.steamgames.com/doc/features/multiplayer/networking)
+  (relay/UDP platform possibilities, not TS3-use evidence).
+- **S7 — Unity documentation:** [Log files](https://docs.unity3d.com/Manual/log-files.html)
+  (general engine log behaviour, not a TS3 schema).
+- **S8 — repository evidence:** [installed airport and schedule coverage](ts3-installed-airport-schedule-data-coverage.md)
+  (static-resource scope).
+- **S9 — canonical earlier evidence:** [issue #4 result comment](https://github.com/CrankyAnt/TowerGlance/issues/4#issuecomment-5156717657)
+  and [Player.log lifecycle coverage](ts3-player-log-event-lifecycle-coverage.md)
+  (prior bounded log/process evidence).
+- **S10 — independent public technical lead, negative screen:** [SteamDB Update
+  7 patch index](https://steamdb.info/patchnotes/23732564/) (an unaffiliated
+  build/patch index that reproduces the official Update 7 text; no independent
+  TS3 port, protocol, payload, or interface claim was found or relied on).
 
-### Independent local evidence
+### Sanitised local provenance
 
-- **L1 — TS3 user-data static inventory (2026-08-02):** current and previous
-  Player logs were present and text-readable; the cache directory had no files.
-  No content was retained or reproduced.
-- **L2 — persistent-file metadata observation (2026-08-02):** timestamp/length
-  observation in the validated game installation and persistent user-data roots.
-  It reproduced current/previous log-family changes without retaining content,
-  paths, or hashes.
-- **L3 — process/socket metadata observation (2026-08-02):** game-root-filtered
-  process roles, parent/lifecycle, module basenames, endpoint classes, socket
-  states, salted connection tokens, and a global pipe-namespace difference. No
-  connect, payload, endpoint value, object name, or raw traffic was retained.
-- **L4 — user-authorized GUI phase observation (2026-08-02):** launch, main
-  menu, stock-airport Quick Play, accelerated unattended activity, Add Window,
-  menu return, and exit. No aircraft or ATC command was issued and no persistent
-  setting was changed.
-- **L5 — post-session static local inventory (2026-08-02):** sanitized
-  TS3-owned component/configuration roles plus an installation-root-filtered
-  service and registry check. No code, binary implementation detail, endpoint,
-  path, field value, or object name is published.
-- **S2 — repository local evidence:** [installed airport and schedule coverage](ts3-installed-airport-schedule-data-coverage.md).
-- **S3 — canonical earlier controlled evidence:** [issue #4 result comment](https://github.com/CrankyAnt/TowerGlance/issues/4#issuecomment-5156717657).
-- **S4 — repository local evidence:** [Player.log lifecycle coverage](ts3-player-log-event-lifecycle-coverage.md).
+- **L1 — documentary/static review, 2026-08-02–03:** game-owned settings,
+  static resources, diagnostic roles, component/configuration roles, modules,
+  services/tasks, registry, and Unity context. Supports static-class and
+  configuration rows; excludes code, raw paths, binary details, and content.
+- **L2 — runtime lifecycle/socket/handle observation, 2026-08-02–03:** menu,
+  settings, active single-player with user operations, external-window overlap,
+  multiplayer list/host/lobby, return, and restart. Supports lifecycle,
+  listener, port, process, UDP/multiplayer, pipe/shared-object/handle and
+  window rows; excludes active remote interaction, object reads, or injection.
+- **L3 — bounded external-window transport sample, 2026-08-03:** 5,000-frame
+  aggregate signature only. Supports bidirectionality and the stated format
+  metrics; excludes raw payload, schema, keys, records, and message semantics.
+- **L4 — bounded external-app lead observation, 2026-08-03:** connection-role
+  correlation only. Supports hypothesis prioritisation, never TS3 protocol or
+  implementation claims; excludes external logs, code, UI, product details,
+  private streams, and dependencies.
+- **L5 — independent-public-source screen, 2026-08-03:** checked the S10
+  SteamDB patch/build index against the official Update 7 announcement. Supports
+  only the documented negative result: it did not add an independent interface
+  claim and was not promoted beyond a hypothesis/time-index lead.
