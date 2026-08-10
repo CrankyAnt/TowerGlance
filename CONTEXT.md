@@ -1,6 +1,6 @@
 # TowerGlance
 
-TowerGlance presents the local operational picture of a Tower! Simulator 3 session in an independent, read-only webview.
+TowerGlance presents the local operational picture of a Tower! Simulator 3 session in an independent local webview and may project explicitly selected stripboard placement back into that session.
 
 ## Language
 
@@ -25,19 +25,23 @@ A TowerGlance-owned local copy of previously reconstructed state for an identifi
 _Avoid_: Browser cache, authoritative game data
 
 **Stripboard Mode**:
-The user-selected policy by which TowerGlance maintains positions and order across its entire external stripboard. A stripboard uses either Automatic Stripboard Mode or Manual Stripboard Mode.
+The user-selected policy by which TowerGlance advances Game-backed Strip Positions and maintains order across its entire external stripboard. A stripboard uses either Automatic Stripboard Mode or Manual Stripboard Mode.
 _Avoid_: Automation setting
 
+**Game-backed Strip Position**:
+The operational block assigned to a strip and recorded in Tower! Simulator 3 so TowerGlance and the in-game board can present the same placement. It excludes the strip's order within that block.
+_Avoid_: TowerGlance-only position, strip order
+
 **Automatic Stripboard Mode**:
-A Stripboard Mode in which TowerGlance derives and maintains strip positions and order from the game information it observes. The user may correct the result manually without changing the in-game board.
-_Avoid_: Automatic game board
+A Stripboard Mode in which TowerGlance derives when strips should move between operational blocks and records their Game-backed Strip Positions. The user may correct a position or its TowerGlance order without leaving this mode.
+_Avoid_: Fully automatic board
 
 **Manual Stripboard Mode**:
-A Stripboard Mode in which the user controls strip positions and order and TowerGlance does not automatically move existing strips between operational blocks.
+A Stripboard Mode in which the user controls Game-backed Strip Positions and strip order and TowerGlance does not automatically move existing strips between operational blocks.
 _Avoid_: Manual override
 
 **Manual Correction**:
-A user-directed change to one strip's position or order while the stripboard remains in Automatic Stripboard Mode. Its precedence and release rules are part of the automatic-board policy rather than a separate Stripboard Mode.
+A user-directed change to one Game-backed Strip Position or to its TowerGlance order while the stripboard remains in Automatic Stripboard Mode. Its precedence and release rules are part of the automatic-board policy rather than a separate Stripboard Mode.
 _Avoid_: Manual mode, game-board change
 
 **ADIRS**:
