@@ -57,7 +57,7 @@ The forward-looking and current view of planned and active traffic, including ti
 _Avoid_: Flight update list
 
 **Traffic Schedule Source**:
-The game-owned local database profile and schedule-file set whose verified selection supplies the planned traffic for one Operational Session. Until a Source Authority Rule proves that selection, candidate-file discovery, a default-profile assumption, session mode, or partial live-traffic correlation remains unverified and cannot establish Schedule Horizon authority.
+The game-owned Operational Session configuration that identifies the selected local database profile and resolves its applicable planned-traffic file set through the game's per-file selection rules. Quick Play and Career share the profile-selection rule but select their applicable main schedule variant; candidate discovery, an assumed default, or partial live-traffic correlation does not establish this source.
 _Avoid_: Session mode, assumed default schedule, best-matching schedule
 
 **Schedule Horizon**:
@@ -73,7 +73,7 @@ The rule assigning each normalized fact category to one game-derived source or a
 _Avoid_: Global source priority, best-effort merge
 
 **Normalized Fact**:
-A TowerGlance representation of one observed or derived fact that retains its value or explicit absence, source provenance, observation time or order, Operational Session context, and applied Source Authority Rule. It distinguishes explicit empty, unknown, unavailable, ambiguous, and stale or recovered states without inventing a default or assumed state.
+A TowerGlance representation of one observed or derived fact that retains its value or explicit absence, source provenance, observation time or order, Operational Session context, and applied Source Authority Rule. It distinguishes explicit empty, not configured, unknown, unavailable, ambiguous, and stale or recovered states without inventing a default or assumed state.
 _Avoid_: Merged value, best guess
 
 **Derived Fact**:
@@ -83,6 +83,10 @@ _Avoid_: Inferred truth, heuristic fact, upgraded evidence
 **Ambiguous Fact**:
 A Normalized Fact for which two admitted authority sources report conflicting values within the same applicable Operational Session context. It preserves every conflicting value and its provenance and cannot drive affected automatic behaviour unless an explicit category-specific precedence rule resolves the conflict.
 _Avoid_: Unknown fact, unavailable fact, latest value wins
+
+**Not Configured**:
+A Normalized Fact state showing that a supported optional game capability is deliberately disabled or has no configured source in the applicable Operational Session. It is not unavailable: an expected configured source that cannot be read or satisfied is unavailable.
+_Avoid_: Unavailable source, missing source
 
 **Observation Order**:
 The source-scoped order in which TowerGlance may compare observations when their Source Authority Rule proves a common ordering within the applicable Operational Session context. Receipt time alone creates no precedence, and observations from different sources or across a reconnect are not implicitly comparable.
