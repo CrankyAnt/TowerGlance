@@ -196,21 +196,69 @@ _Avoid_: Browser cache, authoritative game data
 The user-selected policy by which TowerGlance advances Game-backed Strip Positions and maintains order across its entire external stripboard. A stripboard uses either Automatic Stripboard Mode or Manual Stripboard Mode.
 _Avoid_: Automation setting
 
+**In-game Strip**:
+A game-owned strip observed on the Tower! Simulator 3 stripboard with game-maintained content and a current operational block. Its existence precedes creation of the corresponding TowerGlance Strip.
+_Avoid_: TowerGlance Strip, planned strip
+
+**TowerGlance Strip**:
+The TowerGlance-owned representation of one correlated In-game Strip on the same active game-owned stripboard layout. It shares the confirmed Game-backed Strip Position while retaining TowerGlance-owned order within that block.
+_Avoid_: In-game Strip, schedule row
+
+**Strip Content**:
+The occurrence and current operational facts presented on corresponding In-game and TowerGlance Strips, including dynamic runway and landing/take-off-clearance indications. Strip Content neither determines Flight lifecycle nor constitutes a Game-backed Strip Position.
+_Avoid_: Strip Position, Flight state
+
 **Game-backed Strip Position**:
-The current operational block recorded for a strip in Tower! Simulator 3 so TowerGlance and the in-game board can present the same placement. It records board placement, not lifecycle state, operational correctness, or the strip's order within that block.
+The effective current operational block for a strip in Tower! Simulator 3 so TowerGlance and the in-game board can present the same placement. It is the explicit game-recorded block when present and otherwise the active profile's direction-specific start block for a newly observed strip. It records board placement, not lifecycle state, operational correctness, or the strip's order within that block.
 _Avoid_: TowerGlance-only position, strip order
 
+**Strip Transition Profile**:
+A capability-specific rule set that maps positive authoritative Operational Facts for one admitted traffic and scenario class onto edges in the active game-owned stripboard graph and their Strip Content consequences. It selects graph nodes through structural metadata such as direction, type, runway, and `Next`; free-form block header wording is not semantic evidence, and one profile is not inherited by an unverified traffic or scenario class.
+_Avoid_: Universal phase sequence, header-name parser, visual layout
+
 **Automatic Stripboard Mode**:
-A Stripboard Mode in which TowerGlance derives when strips should move between operational blocks and records their Game-backed Strip Positions. The user may correct a position or its TowerGlance order without leaving this mode.
+A Stripboard Mode in which TowerGlance keeps Strip Content current, continuously derives when strips should move between operational blocks, and records their Game-backed Strip Positions without routine user action while allowing Manual Corrections. Switching from Manual Stripboard Mode begins with one catch-up pass using current positive authoritative Operational Facts and an admitted Strip Transition Profile, preserving each block's Manual Strip Order.
 _Avoid_: Fully automatic board
 
 **Manual Stripboard Mode**:
-A Stripboard Mode in which the user controls Game-backed Strip Positions and strip order and TowerGlance does not automatically move existing strips between operational blocks.
+A Stripboard Mode in which the user controls each strip from either the in-game or TowerGlance stripboard: TowerGlance mirrors an observed in-game move and records a TowerGlance-originated move back to the game, without automatic progression or progression hints. Entering this mode preserves confirmed positions and per-block ordering policies while Strip Content remains live; Manual Stripboard Update remains a separate explicit action.
 _Avoid_: Manual override
 
+**Manual Stripboard Update**:
+A user-triggered single reconciliation pass that aligns every TowerGlance Strip using current In-game Strip observations and the retained authoritative lifecycle of its Flight while Manual Stripboard Mode remains selected. It removes an absent strip only when that lifecycle establishes Ended; otherwise the absence remains a Strip Reconciliation Conflict.
+_Avoid_: Automatic mode, mode switch, refresh data source
+
+**Strip Reconciliation Conflict**:
+The state in which an In-game Strip is absent while the retained authoritative lifecycle of its correlated Flight does not establish Ended. TowerGlance retains its strip until newer authoritative evidence resolves the conflict.
+_Avoid_: Completed strip, automatic removal, missing means ended
+
+**Scheduled Time Priority**:
+The earliest-known-Scheduled-Time-first ordering of TowerGlance Strips within an operational block where the controller can still influence handling sequence, using Block Entry Order for equal times and placing strips without a known Scheduled Time afterwards in Block Entry Order. It expresses handling priority rather than physical aircraft sequence; approach, runway-waiting, and BIN blocks use Block Entry Order with an Initial Strip Order fallback instead of continuous time sorting.
+_Avoid_: Greatest delay first, physical queue position
+
+**Default Strip Order**:
+The default TowerGlance-owned order within one operational block: Scheduled Time Priority in blocks where handling can still be prioritized, and Block Entry Order in approach, runway-waiting, and BIN blocks. Entry order does not itself establish the physical aircraft sequence.
+_Avoid_: Universal time sorting, proven physical queue
+
+**Manual Strip Order**:
+A user-arranged TowerGlance Strip order that temporarily replaces one block's Default Strip Order until the user explicitly restores it, with newly entering strips appended at the bottom. It is available in every block and does not change the Stripboard Mode or suspend automatic transitions between blocks.
+_Avoid_: Manual Stripboard Mode, corrected game position
+
+**Block Entry Order**:
+The order in which TowerGlance Strips enter one specific operational block, independent of when their Aircraft first appeared. Leaving and later re-entering that block constitutes a new entry at the end of this order; restoring entry order uses these block entries and does not establish physical aircraft sequence.
+_Avoid_: Aircraft appearance order, physical queue position
+
+**Initial Strip Order**:
+The starting order of strips already present when TowerGlance begins observing a block whose default is Block Entry Order, taken from a reliable game-provided order when available and otherwise from earliest known Scheduled Time. This seeds subsequent Block Entry Order without claiming historical or physical sequence or presenting an unknown-entry-order notice.
+_Avoid_: Reconstructed entry history, continuous time sorting
+
 **Manual Correction**:
-A user-directed change to one Game-backed Strip Position or to its TowerGlance order while the stripboard remains in Automatic Stripboard Mode. Its precedence and release rules are part of the automatic-board policy rather than a separate Stripboard Mode.
+A user-directed change to one Game-backed Strip Position from either board, or to its TowerGlance-owned order, while the stripboard remains in Automatic Stripboard Mode. A corrected position takes precedence over unchanged operational facts until new positive authoritative Operational Facts justify a subsequent automatic transition.
 _Avoid_: Manual mode, game-board change
+
+**BIN**:
+The visible game-owned stripboard block to which a strip may be moved even while its Flight remains active; placement there neither deletes the strip nor establishes Flight completion. A user-directed move there in Automatic Stripboard Mode remains a Manual Correction without a special lock, so new positive authoritative Operational Facts may justify an automatic transition out of BIN.
+_Avoid_: Deleted strip, completed Flight
 
 **ADIRS**:
 The Tower! Simulator 3 term observed in game-owned local data for an airport-surface display. TowerGlance adopts ADIRS for its corresponding live view of an airport layout and the aircraft presented on it.
