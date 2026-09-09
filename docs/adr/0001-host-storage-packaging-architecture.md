@@ -86,6 +86,16 @@ and `docs/research/host-browser-stack-comparison.md`; the decision was made in
 - **Svelte, Lit, or vanilla TypeScript frontend:** viable, but React offers
   the widest set of accessible primitives and keyboard-capable drag
   alternatives needed for WCAG 2.2 criteria 2.5.7 and 2.5.8.
+- **Native window shell instead of browser windows** (Electron, Tauri, or a
+  .NET WebView2 shell): the React UI would be identical, so a shell adds
+  window management, multi-monitor placement, zoom, and menus as our own
+  code while removing what browsers provide for free and closing the door
+  to later multi-device use. Electron would add a second runtime and stack
+  beside the .NET host; Tauri requires Rust. Rejected for v1. If a
+  native-feeling shell proves necessary, a .NET WebView2 shell hosting the
+  same React app over the same loopback contract is the reversible path:
+  the WebView2 Evergreen Runtime is included in Windows 11 and Playwright
+  can drive WebView2 through the Chrome DevTools Protocol.
 
 ## Consequences
 
@@ -100,3 +110,12 @@ and `docs/research/host-browser-stack-comparison.md`; the decision was made in
 - Unelevated listener enumeration and the absence of a firewall prompt for a
   loopback-only bind are documented but not yet exercised; the first host
   prototype must confirm them.
+- The loopback endpoint is reachable by every local process and web page;
+  WebSocket upgrades are accepted only with a loopback `Origin` and a
+  per-install session token, and the host never exposes a generic command
+  API.
+- The two-part feel of a tray host plus a browser tab is mitigated by
+  opening the browser on host start, a Start Menu entry that opens the
+  current URL, and tray status. Whether Edge and Chrome allow installing the
+  UI as an app from the loopback origin is verified by the integrated
+  experience prototype, not assumed.
