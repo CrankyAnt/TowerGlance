@@ -204,6 +204,10 @@ _Avoid_: Session lifetime, proof of session continuity
 A TowerGlance-owned local copy of the last confirmed state for an identifiable Operational Session, shown only while that session's continuity remains possible during a temporary source loss. It remains stale with visible age and uncertainty and cannot drive automation or writes; confirmed session end discards it, and only newer authoritative information from the proven same session supersedes it.
 _Avoid_: Browser cache, authoritative game data
 
+**Session Continuity**:
+TowerGlance's code-owned classification of whether current game evidence continues the followed Operational Session as Same Session, ends it as Different Session, or leaves it Ambiguous. It is proven only by positive process-instance, connection, Ready-context, and joined live-traffic evidence; listener loss, similarity of airport or callsigns, or elapsed time never upgrade an unresolved case.
+_Avoid_: Reconnect detection, session timeout, heuristic session match
+
 **Stripboard Mode**:
 The policy explicitly selected by the user on first use, before automatic block transitions begin, by which TowerGlance advances Game-backed Strip Positions and maintains order across its entire external stripboard. The choice of Automatic Stripboard Mode or Manual Stripboard Mode persists as a user preference across new Operational Sessions and expiry of the Recovery Window.
 _Avoid_: Automation setting
@@ -347,6 +351,10 @@ _Avoid_: Not seen means removed, timeout deletion
 **Capability Contract**:
 The downstream definition of the smallest independently useful layer or action and its required and optional Normalized Facts. A supported unit is available only while every required Source Authority Rule is satisfied; optional gaps remain explicit, while unverified and unsupported units receive no operational availability status.
 _Avoid_: Whole-application health, all-or-nothing capability
+
+**Communication Port**:
+The game-owned, loopback-only interface on the port selected in Tower! Simulator 3 settings through which the TowerGlance Host observes an Operational Session and performs the single bounded Game-backed Strip Position write. Its presence, closing, and reopening are session evidence only in combination with the applicable Session Continuity rule.
+_Avoid_: Game API, telemetry port, external-window protocol
 
 **Local Access**:
 The default access boundary in which TowerGlance accepts browser clients only from the computer running TowerGlance.
