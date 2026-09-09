@@ -4,6 +4,14 @@ TowerGlance presents the local operational picture of a Tower! Simulator 3 sessi
 
 ## Language
 
+**TowerGlance Host**:
+The local TowerGlance process that follows the Operational Session and maintains its current application state and selected Stripboard Mode independently of the browser. Closing, reloading, or temporarily disconnecting the browser does not stop its operation; a returning browser receives the current state, including the selected mode, per-block ordering policies, and Manual Corrections.
+_Avoid_: Browser tab, Operational Session
+
+**Browser State**:
+The browser-held projection of shared TowerGlance Host state for the followed Operational Session, combined with that window's independent navigation, zoom, and filters retained across reload and reconnect. During disconnection it remains visibly last-known and read-only for host-directed changes; reconnection reconciles it with the current host state rather than replaying queued user actions.
+_Avoid_: Authoritative game state, offline command queue
+
 **Operational Session**:
 One continuous Tower! Simulator 3 run at one airport whose observed and derived operational state TowerGlance presents; a TowerGlance instance follows at most one such live run. Returning to the game menu ends it, and a later run is a new Operational Session rather than a continuation.
 _Avoid_: Browser session, user session
@@ -188,12 +196,16 @@ _Avoid_: Time since any schedule value, landing delay by default
 An airport package supplied with Tower! Simulator 3 or through a locally installed official airport DLC and eligible for capability-specific verification against TowerGlance's validated official-airport standard.
 _Avoid_: Supported airport, known airport
 
+**Recovery Window**:
+The 30-minute period after the TowerGlance Host's last confirmed game observation during which retained TowerGlance state remains eligible for restoration, subject to positive proof of the same Operational Session and reconciliation with current authoritative game facts. Expiry requires a fresh attachment without restoring prior strip ordering or Manual Corrections; it does not prove that the game started a different Operational Session.
+_Avoid_: Session lifetime, proof of session continuity
+
 **Recovery Snapshot**:
 A TowerGlance-owned local copy of the last confirmed state for an identifiable Operational Session, shown only while that session's continuity remains possible during a temporary source loss. It remains stale with visible age and uncertainty and cannot drive automation or writes; confirmed session end discards it, and only newer authoritative information from the proven same session supersedes it.
 _Avoid_: Browser cache, authoritative game data
 
 **Stripboard Mode**:
-The user-selected policy by which TowerGlance advances Game-backed Strip Positions and maintains order across its entire external stripboard. A stripboard uses either Automatic Stripboard Mode or Manual Stripboard Mode.
+The policy explicitly selected by the user on first use, before automatic block transitions begin, by which TowerGlance advances Game-backed Strip Positions and maintains order across its entire external stripboard. The choice of Automatic Stripboard Mode or Manual Stripboard Mode persists as a user preference across new Operational Sessions and expiry of the Recovery Window.
 _Avoid_: Automation setting
 
 **In-game Strip**:
