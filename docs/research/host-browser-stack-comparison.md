@@ -88,7 +88,7 @@ App Control until a signing route exists [S35].
 | Local storage | [R6] | Persistent Stripboard Mode preference; bounded Recovery Snapshot inside the 30-minute Recovery Window; sanitized local logs; read-only access to installed game files |
 | Windows packaging | [R1] | Install without a developer toolchain or terminal; no mandatory runtime download; background or tray process; launch, update, port-conflict, and uninstall story |
 | WCAG 2.2 AA | [R1] | English UI meeting AA including the 2.2 criteria that constrain a stripboard |
-| Testing | [R1] and `docs/agents/delivery.md` | Unit tests, protocol tests against a TowerGlance-owned fake Communication Port, browser end-to-end and accessibility checks, GitHub Actions Windows runners |
+| Testing | [R1] and `docs/agents/delivery.md` | Established: automated checks that run before delivery, browser-based visual and interactive acceptance checks, and public fixtures that are minimal, synthetic, or sanitized. Inference, not established: protocol tests against a TowerGlance-owned fake Communication Port replaying synthetic frames, and GitHub Actions Windows runners as the execution environment (see Uncertainties) |
 | Maintainer ergonomics | [R1] | Solo maintainer; primary Python and Lua, growing C#; typing and tooling support; dependency surface; runtime support window |
 
 ## Constraint by stack matrix
@@ -223,7 +223,13 @@ second toolchain for browser and accessibility tests. GitHub Actions
 Windows runners are general platform knowledge and were not separately
 cited. A TowerGlance-owned fake Communication Port for protocol tests is
 possible in every candidate language because the wire is newline-delimited
-text over TCP [R2][R7] (inference on effort parity).
+text over TCP [R2][R7] (inference on effort parity). Whether such a fake and
+its fixtures can be produced and kept in the public repository is not
+established by this comparison: raw captures, private decodes, and the
+local semantic matrix were discarded after [R2], and the fixture boundary
+in [R1] permits only minimal synthetic or sanitized material. That policy
+question is surfaced to the map as a separate decision rather than assumed
+here.
 
 ## Per-stack sections
 
@@ -435,6 +441,11 @@ windows [S27]; SSE remains acceptable only for a single-window fallback.
   official bindings were counted [S33].
 - Self-contained .NET tray-host size and startup, and PyInstaller
   one-folder startup, were not measured.
+- The testing shape used as a comparison row (fake Communication Port,
+  synthetic frame fixtures, Windows CI runners) is engineering inference.
+  Which Communication Port protocol knowledge may be recorded publicly and
+  how fixtures are produced after the discarded decodes is an open
+  maintainer decision, not a settled constraint.
 
 ## Next steps
 
