@@ -1,30 +1,40 @@
 # Delivery
 
-## Repository default
-
-Every implementation Work Brief, spec, or delivery ticket records:
+Every implementation Work Brief or spec, and no sliced ticket, records:
 
 ```markdown
 ## Delivery strategy
 
-**Delivery path:** direct-main | dedicated-branch
-**Publish boundary:** commit | commit-and-push | draft-pr | merge
+**Delivery path:** direct-main | dedicated-branch | none
+**Publish boundary:** commit | commit-and-push | draft-pr | pr | merge | none
 **Required validation:** <commands or policy>
 **Reason:** <risk-based reason>
 ```
 
-When a Work Brief contains no justified override, use:
+Use direct-main only for a recorded small, local, reversible change with no schema, data, dependency, security, authentication, public-API, or parallel-work risk, after relevant validation passes and when repository rules permit it. The builder commits to the default branch and the user or delegating agent checks the result afterwards. Use `none` on both lines only for work whose only output is tracker content, such as comments or new issues; its builder changes no repository, stops after the published result and its independent receipt by a fresh subagent, and leaves closing the request to the user or delegating agent. Under dedicated-branch, the builder owns a branch and works up to the recorded boundary. Before it decides a PR's state, a fresh subagent receives the work under the receive contract and ticks only demonstrated criteria. Under `pr` the builder opens a ready PR once every criterion is ticked and the user or delegating agent merges; under `merge` the builder merges after full receipt and the pre-merge gate. Missing evidence or an open decision keeps the PR draft.
+
+Planning tickets inherit the invoking map's delivery strategy, or the repository strategy below when the map records no override. Apply an unambiguous direct-main exception autonomously; ask only when the applicable strategy genuinely cannot be determined.
+
+Default to `merge`: the builder merges after independent receipt and the pre-merge gate. Choose `pr` only when the user or delegating agent must make the merge decision itself after complete evidence, and `draft-pr` for review before the evidence is complete. The boundary is chosen when the contract is written; a delegating agent follows it or changes the contract, never a prompt override. Builders never tick their own criteria and do not route findings. Missing acceptance evidence keeps the final PR draft.
+
+## Repository strategy
 
 **Delivery path:** dedicated-branch
-
 **Publish boundary:** merge
-
-**Required validation:** Before `manage-ci` establishes concrete repository commands, run the narrowest relevant available test, lint, typecheck, or build target and run `git diff --check`. If a required check does not exist or cannot be executed, do not merge automatically; leave a draft PR that names the missing evidence. After `manage-ci` establishes the completion suite, that suite becomes mandatory before merge.
-
+**Required validation:** the commands and workflows under `## Testing instructions` in `AGENTS.md`
 **Reason:** TowerGlance includes network-protocol handling, state models, dependencies, and a public interface, so ordinary product work does not meet the low-risk direct-main criteria.
 
-Use direct-main only for a small, local, reversible change with no schema, data, dependency, security, authentication, public-API, or parallel-work risk, after relevant validation passes and when repository rules permit it. Otherwise use a dedicated branch.
+None.
 
-Planning tickets inherit the invoking map's delivery strategy, or this repository strategy when the map records no override. Their durable research artifacts follow the same strategy. Apply an unambiguous direct-main exception autonomously; ask only when the applicable strategy genuinely cannot be determined.
+## Gitleaks before a push
 
-The `merge` boundary is evidence-gated: `deliver-work` attempts every acceptance check it can perform, including browser-based visual and interactive workflows, and merges automatically only when every criterion is checked and all review, validation, CI, and mergeability gates pass. Any criterion lacking evidence leaves the PR as draft for the remaining human input. Use `draft-pr` only when preliminary maintainer review is intentionally required even if all criteria can be proven.
+Before every `git push` that sends commits, Gitleaks must pass from the repository root. This covers a branch push, a forced push, a push of a ref other than `HEAD`, and a tag push. It does not cover operations on the provider, such as merging a pull request there or editing a file in its web interface, nor deleting a remote branch or tag.
+
+First refresh the remote-tracking refs of the target remote. Then scan, for each pushed ref, the commits reachable from it that no remote-tracking ref of that remote contains; a push of several refs lists them all before `--not`:
+
+```text
+git fetch --prune <remote>
+gitleaks git --log-opts="<ref> --not --remotes=<remote>" --redact --no-banner --no-color
+```
+
+Setup records the repository's Gitleaks options here; add them to the command: none. Agents use the locally installed Gitleaks. When Gitleaks is not installed, the push waits and the agent reports it. This gate applies to every push that sends commits, whatever route produced them, research branches included; local commits may precede it.
