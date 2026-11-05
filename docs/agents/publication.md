@@ -2,20 +2,24 @@
 
 **Repository visibility:** public
 
-**Tracked or shared surfaces:** All tracked repository files and all GitHub Issues, pull requests, reviews, comments, labels, releases, and other repository-visible metadata.
+**Tracked or shared surfaces:** all tracked repository files and all GitHub issues, pull requests, reviews, comments, labels, releases and other repository-visible metadata
 
 **Local-only surface:** `.docs/`
 
-Treat tracked files and tracker content as public. Publish professional, evidence-based conclusions without private deliberation, personal judgments, or unnecessary person-sensitive context. Show exact wording for approval when it could materially affect a person or organisation.
+## Publication authority
 
-Describe TowerGlance solely through its own goals, behaviour, independently obtained evidence, and relationship with Tower! Simulator 3. Do not identify, cite, compare against, or credit an external companion project as inspiration or functional reference.
+**Two-way actions:** autonomous
 
-Do not publish secrets, credentials, authentication material, personal data, absolute user paths, raw session logs, or unnecessary machine-specific information.
+**One-way actions that require a user question:**
 
-Do not publish or derive tracked artifacts from third-party application code, assets, private APIs, authentication, subscriptions, data streams, installation files, or implementation details.
+- Destructive or hard-to-reverse operations.
 
-Protocol fixtures must be minimal, synthetic or sanitized, and limited to data needed to test Tower! Simulator 3 interoperability. Do not include third-party proprietary content.
+**Standalone PR merge:** squash merge
 
-Separate observed evidence, engineering inference, and maintainer decisions in public technical claims.
+**Ticket to integration merge:** squash merge into the integration branch; the ticket's closing comment names the one landing commit
 
-Local-only files may preserve fuller internal reasoning, but never secrets, credentials, authentication material, sensitive personal data, or copied proprietary third-party content.
+**Integration to default merge:** merge commit into `main`, which keeps the child SHAs and adds one first-parent spec commit
+
+Treat tracked files and tracker content as potentially public. Publish professional, evidence-based conclusions without private deliberation, personal judgments, or unnecessary person-sensitive context. State each decision and fact as what holds, not as an act of deciding, with its reason where a reader needs one. Attribute no decision, choice, agreement or approval to any person, role or group, say nothing of when one was made, and leave out anyone's word, wish, preference, request or approval wherever a reader could take it as a ground for one. Of equivalent routes, state only the one taken, as what holds and not as a choice, without the alternatives, any hint of them, or the deliberation. Show exact wording for approval when it could materially affect a person or organisation.
+
+Local-only files may preserve fuller internal reasoning, but never secrets, credentials, or sensitive personal data.
