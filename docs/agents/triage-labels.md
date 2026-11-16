@@ -53,7 +53,7 @@ This label belongs only to requests for shared CI, which the triage of Shared Wo
 
 | Default label | Colour | Meaning |
 | --- | --- | --- |
-| `shared-ci` | `bfd4f2` | A request for a shared part, for an input that a shared part lacks, or for the repair of a fault of a shared part |
+| `shared-ci` | `bfd4f2` | Request for shared CI: a shared part, a missing input or a shared part's fault |
 
 ## Lifecycle sets
 
